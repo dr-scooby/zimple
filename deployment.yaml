@@ -1,0 +1,116 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: red-pv-claim
+  namespace: scoobsns
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10M
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zimple
+  namespace: scoobsns
+  labels:
+    app: zimple
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: zimple
+  template:
+    metadata:
+      labels:
+        app: zimple
+    spec:
+      volumes:
+        - name: red-storage
+          persistentVolumeClaim:
+            claimName: red-pv-claim
+      containers:
+        - name: zimple
+          image: hinurali/zimple:zimple
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: red-storage
+              mountPath: /data/red
+          ports:
+            - containerPort: 2000
+          env:
+            - name:   configValue
+              valueFrom:
+                configMapKeyRef:
+                  name: scoobs-config
+                  key:  configValue
+            - name:   db_url
+              valueFrom:
+                configMapKeyRef:
+                  name: scoobs-config
+                  key:   db_url
+            - name: Message
+              valueFrom:
+                configMapKeyRef:
+                  name: scoobs-config
+                  key:   Message
+            - name:   smtpServer
+              valueFrom:
+                configMapKeyRef:
+                  name: scoobs-config
+                  key:   smtpServer
+            - name: mymountpath
+              valueFrom:
+                configMapKeyRef:
+                  name: scoobs-config
+                  key: mymountpath
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zimple-service
+  namespace: scoobsns
+
+spec:
+  selector:
+    app: zimple
+  ports:
+    - protocol: TCP
+      port: 2000
+      targetPort: 2000
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zimple-service
+  namespace: scoobsns
+spec:
+  type: NodePort
+  selector:
+    app: zimple
+  ports:
+    - protocol: TCP
+      port: 2000
+      #nodePort: 2000
+      targetPort: 2000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zimple-service
+  namespace: scoobsns
+
+spec:
+  selector:
+    app: zimple
+  ports:
+    - protocol: TCP
+      port: 8080 # --> this is the port outside world knows about, the client will access on this port
+      targetPort: 2000 # this is the port the app is set to
+
+  type: LoadBalancer

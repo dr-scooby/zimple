@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scoobs-config
+  namespace: scoobsns
+data:
+  configValue: eagle
+  Message: kubernetezzzzzz
+  db_url: google.com
+  smtpServer: smtp.hotmail.uk
+  mymountpath: /data/red/datafile.txt

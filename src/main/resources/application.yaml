@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    kubernetes:
+      config:
+        name: scoobs-config # Name of your ConfigMap
+        enabled: true
+        namespace: scoobsns # Update with your namespace if necessary

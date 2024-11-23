@@ -1,0 +1,31 @@
+name: zimpleApp
+services:
+  zimple-app:
+    # tag the image with a name and tag
+    image: hinurali/zimpleapp:z1
+    build: .
+    ports:
+      - "8081:2000"
+    depends_on:
+      -   mysql-service
+
+#mysql-service is also the dns name, used in the datasource url
+  mysql-service:
+    image: mysql
+    ports:
+      - "3306:3306"
+
+    volumes:
+      # can also map to the host directory: - ./mysql:/var/lib/mysql
+      - mysql-db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: 'RedZone'
+      MYSQL_USER: 'user'
+        # You can use whatever password you like
+      MYSQL_PASSWORD: 'password'
+        # Password for root access
+      MYSQL_ROOT_PASSWORD: 'password'
+
+
+volumes:
+  mysql-db:
