@@ -33,13 +33,14 @@ spec:
             claimName: red-pv-claim
       containers:
         - name: zimple
-          image: hinurali/zimple:zimple
+          image: hinurali/zimpleapp:z1
           imagePullPolicy: Always
           volumeMounts:
             - name: red-storage
               mountPath: /data/red
           ports:
             - containerPort: 2000
+              name: http-web-svc
           env:
             - name:   configValue
               valueFrom:
@@ -80,7 +81,7 @@ spec:
   ports:
     - protocol: TCP
       port: 2000
-      targetPort: 2000
+      targetPort: http-web-svc
   type: ClusterIP
 
 ---
@@ -97,7 +98,7 @@ spec:
     - protocol: TCP
       port: 2000
       #nodePort: 2000
-      targetPort: 2000
+      targetPort: http-web-svc
 ---
 apiVersion: v1
 kind: Service
@@ -111,6 +112,6 @@ spec:
   ports:
     - protocol: TCP
       port: 8080 # --> this is the port outside world knows about, the client will access on this port
-      targetPort: 2000 # this is the port the app is set to
+      targetPort: http-web-svc # this is the port the app is set to
 
   type: LoadBalancer

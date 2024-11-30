@@ -10,8 +10,8 @@ COPY target/Zimple-0.0.1-SNAPSHOT.jar /app/zimpleapp.jar
 
 COPY shopping.txt /app
 
-# Expose port 8080 to the outside world
-EXPOSE 8080
+# Expose port 2000 to the outside world
+EXPOSE 2000
 
 # Run the jar file when the container starts
 ENTRYPOINT ["java", "-jar", "zimpleapp.jar"]
