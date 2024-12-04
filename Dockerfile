@@ -3,6 +3,13 @@ FROM alpine
 #install jdk17 in alpine linux OS
 RUN apk add --no-cache java-cacerts openjdk17-jdk
 
+# update the Alpine
+RUN apk update
+RUN apk upgrade
+
+# install the curl
+RUN apk --no-cache add curl
+
 WORKDIR /app
 
 # Copy the jar file from the target folder to the container
