@@ -2,10 +2,10 @@ name: zimpleApp
 services:
   zimple-app:
     # tag the image with a name and tag
-    image: hinurali/zimpleapp:z1
+    image: hinurali/zimpleapp:z2
     build: .
     ports:
-      - "8081:2000"
+      - "8080:2000"
     depends_on:
       -   mysql-service
 

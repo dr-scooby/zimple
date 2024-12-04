@@ -33,7 +33,7 @@ spec:
             claimName: red-pv-claim
       containers:
         - name: zimple
-          image: hinurali/zimpleapp:z1
+          image: hinurali/zimpleapp:z2
           imagePullPolicy: Always
           volumeMounts:
             - name: red-storage
